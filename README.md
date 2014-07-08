@@ -180,13 +180,14 @@ To be able to build and test you need to have the following installed:
 
 - [Node.js](http://nodejs.org/)
 - The NPM package `grunt-cli` (can be installed via `npm install -g grunt-cli`, [see more here](http://gruntjs.com/getting-started))
+- Ruby with Bundler
 
-Run `npm install` from the project directory to install dependencies.
+Run `npm install && bundle install` from the project directory to install dependencies.
 
 ### Building
 
-You can build the project simply by running `grunt` in your terminal. If you want to let Grunt watch your files, so it
-automatically builds every time you change something, you can run `grunt watch`.
+You can build the project simply by running `bundle exec grunt` in your terminal. If you want to let Grunt watch your files, so it
+automatically builds every time you change something, you can run `bundle exec grunt watch`.
 
 The build process will place the files `ember-animated-outlet.js`, `ember-animated-outlet.min.js` and
 `ember-animated-outlet.css` in the `dist/` folder.
