@@ -84,7 +84,7 @@ Ember.AnimatedContainerView = Ember.ContainerView.extend({
             if (oldView && effect) {
                 //If an effect is queued, then start the effect when the new view has been inserted in the DOM
                 this._isAnimating = true;
-                newView.on('didInsertElement', function() {
+                newView.one('didInsertElement', function() {
                     Ember.AnimatedContainerView._effects[effect](self, newView, oldView, function() {
                         Em.run(function() {
                             self.removeObject(oldView);
@@ -418,13 +418,13 @@ Ember.AnimatedContainerView.registerEffect('fade', function(ct, newView, oldView
         oldEl = oldView.$();
     newEl.addClass('ember-animated-container-fade-new');
     oldEl.addClass('ember-animated-container-fade-old');
-    setTimeout(function() {
+    Ember.run.next(function() {
         oldEl.addClass('ember-animated-container-fade-old-fading');
-        setTimeout(function() {
+        Ember.run.later(function() {
             newEl.removeClass('ember-animated-container-fade-new');
             callback();
         }, 550);
-    }, 0);
+    });
 });
 Ember.AnimatedContainerView.registerEffect('flip', function(ct, newView, oldView, callback) {
     var ctEl = ct.$(),
@@ -434,19 +434,19 @@ Ember.AnimatedContainerView.registerEffect('flip', function(ct, newView, oldView
     ctEl.addClass('ember-animated-container-flip-ct');
     newEl.addClass('ember-animated-container-flip-new');
     oldEl.addClass('ember-animated-container-flip-old');
-    setTimeout(function() {
+    Ember.run.next(function() {
         ctEl.addClass('ember-animated-container-flip-ct-flipping');
-        setTimeout(function() {
+        Ember.run.later(function() {
             ctEl.unwrap();
             ctEl.removeClass('ember-animated-container-flip-ct');
             ctEl.removeClass('ember-animated-container-flip-ct-flipping');
             newEl.removeClass('ember-animated-container-flip-new');
             callback();
         }, 650);
-    }, 0);
+    });
 });
 (function() {
-    
+
 var slide = function(ct, newView, oldView, callback, direction, slow) {
     var ctEl = ct.$(),
         newEl = newView.$(),
@@ -456,20 +456,18 @@ var slide = function(ct, newView, oldView, callback, direction, slow) {
         ctEl.addClass('ember-animated-container-slide-slow-ct')
     }
     newEl.addClass('ember-animated-container-slide-'+direction+'-new');
-    setTimeout(function() {
+    Ember.run.next(function() {
         ctEl.addClass('ember-animated-container-slide-'+direction+'-ct-sliding');
-        setTimeout(function() {
+        Ember.run.later(function() {
             ctEl.removeClass('ember-animated-container-slide-'+direction+'-ct');
             if (slow) {
                 ctEl.removeClass('ember-animated-container-slide-slow-ct')
             }
             ctEl.removeClass('ember-animated-container-slide-'+direction+'-ct-sliding');
             newEl.removeClass('ember-animated-container-slide-'+direction+'-new');
-            setTimeout(function() {
-                callback();
-            }, 0);
+            callback();
         }, duration);
-    }, 0);
+    });
 };
 
 Ember.AnimatedContainerView.registerEffect('slideLeft', function(ct, newView, oldView, callback) {
@@ -491,7 +489,7 @@ Ember.AnimatedContainerView.registerEffect('slideDown', function(ct, newView, ol
 Ember.AnimatedContainerView.registerEffect('slowSlideLeft', function(ct, newView, oldView, callback) {
     slide(ct, newView, oldView, callback, 'left', true);
 });
-    
+
 Ember.AnimatedContainerView.registerEffect('slowSlideRight', function(ct, newView, oldView, callback) {
     slide(ct, newView, oldView, callback, 'right', true);
 });
@@ -505,6 +503,7 @@ Ember.AnimatedContainerView.registerEffect('slowSlideDown', function(ct, newView
 });
 
 })();
+
 (function() {
 
 var slideOver = function(ct, newView, oldView, callback, direction) {
@@ -513,15 +512,15 @@ var slideOver = function(ct, newView, oldView, callback, direction) {
         duration = 450;
     ctEl.addClass('ember-animated-container-slideOver-old');
     newEl.addClass('ember-animated-container-slideOver-'+direction+'-new');
-    setTimeout(function() {
+    Ember.run.next(function() {
         newEl.addClass('ember-animated-container-slideOver-'+direction+'-new-sliding');
-        setTimeout(function() {
+        Ember.run.later(function() {
             newEl.removeClass('ember-animated-container-slideOver-'+direction+'-new');
             newEl.removeClass('ember-animated-container-slideOver-'+direction+'-new-sliding');
             ctEl.removeClass('ember-animated-container-slideOver-old');
             callback();
         }, duration);
-    }, 0);
+    });
 };
 
 Ember.AnimatedContainerView.registerEffect('slideOverLeft', function(ct, newView, oldView, callback) {

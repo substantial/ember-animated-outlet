@@ -9,9 +9,9 @@ var slide = function(ct, newView, oldView, callback, direction, slow) {
         ctEl.addClass('ember-animated-container-slide-slow-ct')
     }
     newEl.addClass('ember-animated-container-slide-'+direction+'-new');
-    setTimeout(function() {
+    Ember.run.next(function() {
         ctEl.addClass('ember-animated-container-slide-'+direction+'-ct-sliding');
-        setTimeout(function() {
+        Ember.run.later(function() {
             ctEl.removeClass('ember-animated-container-slide-'+direction+'-ct');
             if (slow) {
                 ctEl.removeClass('ember-animated-container-slide-slow-ct')
@@ -20,7 +20,7 @@ var slide = function(ct, newView, oldView, callback, direction, slow) {
             newEl.removeClass('ember-animated-container-slide-'+direction+'-new');
             callback();
         }, duration);
-    }, 0);
+    });
 };
 
 Ember.AnimatedContainerView.registerEffect('slideLeft', function(ct, newView, oldView, callback) {
